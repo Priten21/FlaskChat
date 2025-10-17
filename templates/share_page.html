@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shared Chat: {{ conversation.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body class="share-page-body">
+    <div class="share-container">
+        <header class="share-header">
+            <h1>{{ conversation.title }}</h1>
+            <p>Shared on: {{ conversation.created_at.strftime('%Y-%m-%d') }} by {{ conversation.author.username }}</p>
+        </header>
+        <main class="share-chat-box">
+            {% for message in conversation.messages %}
+                <div class="message {{ 'user-message' if message.sender == 'user' else 'bot-message' }}">
+                    <!-- Store content in a data attribute to safely pass to JS -->
+                    <div class="message-content" data-content="{{ message.content | tojson | safe }}"></div>
+                </div>
+            {% endfor %}
+        </main>
+    </div>
+
+    <!-- A single script to process all messages after the page loads -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const messageElements = document.querySelectorAll('.message-content');
+            messageElements.forEach(function(element) {
+                const contentJson = element.getAttribute('data-content');
+                if (contentJson) {
+                    try {
+                        // The content is a JSON string (e.g., "\"Hello\\nWorld\""), 
+                        // so we parse it to get the raw string for the markdown parser.
+                        const rawContent = JSON.parse(contentJson);
+                        element.innerHTML = marked.parse(rawContent);
+                    } catch (e) {
+                        console.error("Failed to parse message content:", e);
+                        // Fallback for safety, though it should not be needed.
+                        element.textContent = contentJson;
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

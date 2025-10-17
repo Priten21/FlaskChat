@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" class="dark"> <!-- Default to dark theme -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlaskChat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Sidebar for Conversation History -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="{{ url_for('home') }}" class="new-chat-btn">
+                    <span class="material-symbols-outlined">add</span>
+                    New Chat
+                </a>
+            </div>
+            <nav id="conversation-history" class="conversation-history">
+                <!-- Conversation links will be loaded here by JavaScript -->
+            </nav>
+            <div class="sidebar-footer">
+                <div class="theme-switcher">
+                    <span class="material-symbols-outlined">light_mode</span>
+                    <label class="switch">
+                        <input type="checkbox" id="theme-toggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span class="material-symbols-outlined">dark_mode</span>
+                </div>
+                <a href="{{ url_for('logout') }}" class="logout-link">
+                    <span class="material-symbols-outlined">logout</span>
+                    Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="chat-area">
+            <header class="chat-header">
+                <h1 id="chat-title" class="chat-title">New Chat</h1>
+                <div class="header-actions">
+                    <button id="share-chat-btn" class="header-action-btn" title="Share Chat">
+                        <span class="material-symbols-outlined">share</span>
+                    </button>
+                    <div class="export-menu">
+                        <button id="export-menu-btn" class="header-action-btn" title="Export Chat">
+                            <span class="material-symbols-outlined">download</span>
+                        </button>
+                        <div id="export-options" class="export-options">
+                            <a href="#" data-format="txt">as Text (.txt)</a>
+                            <a href="#" data-format="json">as JSON (.json)</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div id="chat-box" class="chat-box">
+                <!-- Suggestion chips for new chats -->
+                <div id="suggestions-container" class="suggestions-container">
+                    <button class="suggestion-chip">Explain quantum computing</button>
+                    <button class="suggestion-chip">Write a short story</button>
+                    <button class="suggestion-chip">Suggest a recipe for dinner</button>
+                    <button class="suggestion-chip">Plan a 3-day trip to Tokyo</button>
+                </div>
+                <!-- Messages will be loaded here -->
+            </div>
+
+            <div class="typing-indicator-container">
+                <div class="typing-indicator" id="typing-indicator">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+
+            <footer class="chat-footer">
+                <form id="message-form" class="message-form">
+                    <textarea id="message-input" class="message-input" placeholder="Ask me anything..." rows="1"></textarea>
+                    <button type="submit" class="send-button" title="Send Message">
+                        <span class="material-symbols-outlined">send</span>
+                    </button>
+                </form>
+            </footer>
+        </main>
+    </div>
+    
+    <!-- Share Modal -->
+    <div id="share-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="modal-title">Share Conversation</h2>
+            <p class="modal-text">Anyone with this link can view the conversation.</p>
+            <div class="share-link-container">
+                <input type="text" id="share-link-input" readonly>
+                <button id="copy-link-btn" title="Copy link">
+                    <span class="material-symbols-outlined">content_copy</span>
+                </button>
+            </div>
+            <button id="close-modal-btn" class="btn-close-modal">Done</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

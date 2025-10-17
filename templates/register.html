@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<h1 class="auth-title">Create Account</h1>
+<form method="POST" action="{{ url_for('register') }}">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        {{ form.username.label(class="form-label") }}
+        {{ form.username(class="form-input", placeholder="Choose a username") }}
+    </div>
+    <div class="form-group">
+        {{ form.password.label(class="form-label") }}
+        {{ form.password(class="form-input", placeholder="Choose a secure password") }}
+    </div>
+    <div class="form-group">
+        {{ form.confirm_password.label(class="form-label") }}
+        {{ form.confirm_password(class="form-input", placeholder="Confirm your password") }}
+    </div>
+    <div class="form-group">
+        {{ form.submit(class="btn-submit") }}
+    </div>
+</form>
+<p class="auth-link">
+    Already have an account? <a href="{{ url_for('login') }}">Login here</a>
+</p>
+{% endblock %}
